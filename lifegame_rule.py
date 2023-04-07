@@ -1,7 +1,9 @@
+import config
+
 class LifeGameRule():
     def __init__(self):
-        self.dead = 0
-        self.alive = 1
+        self.dead = config.DEAD
+        self.alive = config.ALIVE
 
         self.lifegame_rule = {
             # 誕生 死んでるセルに隣接する生きたセルが3つあれば、次の世代が誕生する
