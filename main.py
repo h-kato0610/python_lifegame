@@ -7,7 +7,7 @@ CELL_NUM = 64
 ALIVE = 1
 DEAD = 0
 
-GENERATION = 2
+GENERATION = 20
 
 def lifegame_rule(current_cell, around_cell):
     LifeGameRule = {
@@ -20,7 +20,6 @@ def lifegame_rule(current_cell, around_cell):
         'depopulation_overcrowding': DEAD, 
     }
 
-
     if current_cell == DEAD:
         if around_cell == 3:
             return LifeGameRule['birth']
@@ -29,20 +28,14 @@ def lifegame_rule(current_cell, around_cell):
             return LifeGameRule['survive']
 
     return LifeGameRule['depopulation_overcrowding']
-    
 
 def cell_initialize():
     cell = [[0] * CELL_NUM for i in range(CELL_NUM)]
 
-    # for j in range(len(cell)):
-    #     for i in range(len(cell)):
-    #         rand_num = int(random.uniform(DEAD, ALIVE + 1))
-    #         cell[j][i] = rand_num
-
-    cell[32][31] = ALIVE
-    cell[31][32] = ALIVE
-    cell[32][32] = ALIVE
-    cell[31][31] = ALIVE
+    for j in range(len(cell)):
+        for i in range(len(cell)):
+            rand_num = int(random.uniform(DEAD, ALIVE + 1))
+            cell[j][i] = rand_num
 
     return cell
 
@@ -111,3 +104,4 @@ def main():
         cell_view(cell)
 
 main() if __name__ == '__main__' else None
+
