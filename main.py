@@ -1,36 +1,13 @@
 import time
 import random
 
+from lifegame_rule import LifeGameRule
+
 CELL_NUM = 64
 ALIVE = 1
 DEAD = 0
 
-GENERATION = 100
-
-def lifegame_rule(current_cell, around_cell):
-    LifeGameRule = {
-        # 誕生 死んでるセルに隣接する生きたセルが3つあれば、次の世代が誕生する
-        'birth': ALIVE, 
-        # 生存 生きているセルに隣接する生きたセルが2つか3つならば、次の世代でも生存する
-        'survive': ALIVE, 
-        # 過疎 生きているセルに隣接する生きたセルが1つ以下ならば、過疎により死滅する
-        'depopulation': DEAD,
-        # 過密 生きているセルに隣接する生きたセルが4つ以上ならば、過密により死滅する
-        'overcrowding': DEAD, 
-    }
-
-    if current_cell == DEAD:
-        if around_cell == 3:
-            return LifeGameRule['birth']
-    if current_cell == ALIVE:
-        if around_cell == 2 or around_cell == 3:
-            return LifeGameRule['survive']
-        elif around_cell <= 1:
-            return LifeGameRule['depopulation']
-        elif around_cell >= 4:
-            return LifeGameRule['overcrowding']
-
-    return DEAD
+GENERATION = 2
 
 def cell_initialize():
     cell = [[0] * CELL_NUM for i in range(CELL_NUM)]
@@ -79,7 +56,7 @@ def around_cell_calc(cell, j, i):
             cell[j - 1][i - 1] + cell[j + 1][i + 1] + \
             cell[j - 1][i + 1] + cell[j + 1][i - 1]
 
-def calc_next_cell(cell):
+def calc_next_cell(cell, rule):
     next_cell = [[0] * CELL_NUM for i in range(CELL_NUM)]
     out_of_range = 0
 
@@ -93,18 +70,18 @@ def calc_next_cell(cell):
             else:
                 cell_sum = around_cell_calc(cell, j, i)
 
-            next_cell[j][i] = lifegame_rule(center, cell_sum)
+            next_cell[j][i] = rule.is_alive_or_dead(center, cell_sum)
         print()
 
     return next_cell
 
 def main():
     cell = cell_initialize()
-    
+    rule = LifeGameRule() 
     for i in range(GENERATION):
         print('Generation: ' + str(i))
         time.sleep(0.5)
-        cell = calc_next_cell(cell)
+        cell = calc_next_cell(cell, rule)
         cell_view(cell)
 
 main() if __name__ == '__main__' else None
